@@ -1,1 +1,66 @@
+/* style.css (basic styling) */
+body {
+    margin: 16px;
+    color: #222;
+    background: #ffffff;
+}
 
+form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 10px 0;
+}
+
+form input {
+    padding: 6px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    padding: 6px 10px;
+}
+
+#task-error {
+    color: #b00020;
+    min-height: 1em;
+    display: inline-block;
+}
+
+#filter-bar {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.todo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 6px 0;
+    border: 1px solid #dddddd;
+    background: #fff;
+}
+
+.done .label {
+    text-decoration: line-through;
+    color: #666;
+}
+
+#toast {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+    background: #222;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+}

@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SBA_316 DOM</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    
+    <h1>Simple To-Do</h1>
+
+    <p>Completed: <span id="counter">0</span>/<span id="total">0</span></p>
+
+    <form id="add-form" novalidate>
+        <input id="task-input" name="task" type="text" placeholder="Add a task" required minlength="2"
+            pattern="[A-Za-z0-9 ,.'-]+" />
+        <button id="add-btn" type="submit">Add</button>
+        <small id="task-error"></small>
+    </form>
+
+    <div id="filter-bar">
+        <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter-btn" data-filter="active" aria-pressed="false">Active</button>
+        <button class="filter-btn" data-filter="done" aria-pressed="false">Done</button>
+    </div>
+
+    <ul id="todo-list"></ul>
+
+    <div id="toast" hidden>Saved!</div>
+
+    <template id="todo-item-template">
+        <li class="todo">
+            <label>
+                <input class="toggle" type="checkbox" />
+                <span class="label"></span>
+            </label>
+            <button class="delete" type="button">Delete</button>
+        </li>
+    </template>
+
+    <button id="print-btn" type="button">Print</button>
+
+    <script src="app.js" defer></script>
 </body>
+
 </html>

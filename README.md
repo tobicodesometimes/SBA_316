@@ -1,11 +1,12 @@
 Simple To-Do — README
 
-A tiny single-page to-do list built to practice the DOM (HTML/CSS/JS). 
+A tiny single-page to-do list built to practice the DOM (HTML/CSS/JS).
+ 
 How to run: open index.html in your browser.
 
 Files
 
-index.html – basic page, form, filter buttons, list, toast, and a <template> for items
+index.html – basic page, form, filter buttons, list, toast, and a template for items
 
 style.css – very simple styles 
 

@@ -8,32 +8,12 @@ const addBtn = document.getElementById("add-btn");
 const filterBar = document.getElementById("filter-bar");
 const listEl = document.getElementById("todo-list");
 const toastEl = document.getElementById("toast");
-const printBtn = document.getElementById("print-btn");
 const counterEl = document.getElementById("counter");
 const totalEl = document.getElementById("total");
 const templateEl = document.getElementById("todo-item-template");
 
 // Cache by querySelectorAll
 const allFilterBtns = document.querySelectorAll(".filter-btn"); // NodeList (collection)
-
-// Minimal init (no side effects yet)
-(function init() {
-  // Sanity check only (safe to remove later)
-  console.log("Cached:", {
-    formEl,
-    inputEl,
-    errorEl,
-    addBtn,
-    filterBar,
-    listEl,
-    toastEl,
-    printBtn,
-    counterEl,
-    totalEl,
-    templateEl,
-    allFilterBtns,
-  });
-})();
 
 // ===== Step 2 : data, render functions , counters =====
 // Added a tiny task list: 
@@ -67,10 +47,6 @@ function updateCounters() {
   totalEl.textContent = String(items.length);
   counterEl.textContent = String(items.filter((it) => it.done).length);
 }
-
-// updates the page once at the very start — shows an empty list and zero counters — so what you see immediately matches the current data.
-renderAll(items);
-updateCounters();
 
 // ===== Step 3 : add / toggle / delete + simple validation + empty state =====
 // Step 3 makes the app actually work: it checks our input, adds a task on submit,

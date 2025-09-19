@@ -48,7 +48,7 @@ Live validation: on input, we check checkValidity(); enable/disable the Add butt
 
 Add task: on form submit, we push a new item, clear the box, and refresh the UI.
 
-Toggle/Delete: one click listener on the list (event delegation); we walk parent/child/sibling nodes to find the right <li>, toggle its checkbox (done) or remove it.
+Toggle/Delete: one click listener on the list (event delegation); we walk parent/child/sibling nodes to find the right ('li'), toggle its checkbox (done) or remove it.
 
 If the list is empty, we createElement('li') to show “No tasks yet.”
 

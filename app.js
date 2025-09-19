@@ -1,52 +1,61 @@
 // app.js — Step 1: cache all our elements & then store them in a function for now so we can verify we got them in our console.
 
 // Cache by ID
-const formEl     = document.getElementById('add-form');
-const inputEl    = document.getElementById('task-input');
-const errorEl    = document.getElementById('task-error');
-const addBtn     = document.getElementById('add-btn');
-const filterBar  = document.getElementById('filter-bar');
-const listEl     = document.getElementById('todo-list');
-const toastEl    = document.getElementById('toast');
-const printBtn   = document.getElementById('print-btn');
-const counterEl  = document.getElementById('counter');
-const totalEl    = document.getElementById('total');
-const templateEl = document.getElementById('todo-item-template');
+const formEl = document.getElementById("add-form");
+const inputEl = document.getElementById("task-input");
+const errorEl = document.getElementById("task-error");
+const addBtn = document.getElementById("add-btn");
+const filterBar = document.getElementById("filter-bar");
+const listEl = document.getElementById("todo-list");
+const toastEl = document.getElementById("toast");
+const printBtn = document.getElementById("print-btn");
+const counterEl = document.getElementById("counter");
+const totalEl = document.getElementById("total");
+const templateEl = document.getElementById("todo-item-template");
 
-// Cache by querySelector / querySelectorAll
-const firstFilterBtn = document.querySelector('.filter-btn');      // single element
-const allFilterBtns  = document.querySelectorAll('.filter-btn');   // NodeList (collection)
+// Cache by querySelectorAll
+const allFilterBtns = document.querySelectorAll(".filter-btn"); // NodeList (collection)
 
 // Minimal init (no side effects yet)
 (function init() {
   // Sanity check only (safe to remove later)
-  console.log('Cached:', {
-    formEl, inputEl, errorEl, addBtn, filterBar, listEl, toastEl,
-    printBtn, counterEl, totalEl, templateEl, firstFilterBtn, allFilterBtns
+  console.log("Cached:", {
+    formEl,
+    inputEl,
+    errorEl,
+    addBtn,
+    filterBar,
+    listEl,
+    toastEl,
+    printBtn,
+    counterEl,
+    totalEl,
+    templateEl,
+    allFilterBtns,
   });
 })();
 
 // ===== Step 2 : data, render functions , counters =====
-// Step 2 sets up the tiny data model (items), 
-// then defines renderAll() which clears the list, 
-// clones the <template> once per task, fills in the label/checkbox, 
-// applies the .done class if needed, and appends everything in one go with a DocumentFragment for efficiency; it also defines updateCounters() to write the total/done numbers into the page, 
-// and finally calls both once so the UI starts in a known (empty) state—this satisfies our template/cloneNode + fragment requirement and the “modify text content” bit for the counters.
+// Added a tiny task list: 
+// keeps tasks in an array, 
+// draws them by cloning a template into a fragment, 
+// updates the done/total counters, 
+// and runs both once so the page starts with an empty list and zero counts.
 
 let items = []; // simple in-memory list
 
 function renderAll(arr) {
-  listEl.innerHTML = '';
+  listEl.innerHTML = "";
   const frag = document.createDocumentFragment();
 
   arr.forEach((item) => {
     const li = templateEl.content.firstElementChild.cloneNode(true);
-    const checkbox = li.querySelector('.toggle');
-    const label = li.querySelector('.label');
+    const checkbox = li.querySelector(".toggle");
+    const label = li.querySelector(".label");
 
     label.textContent = item.text;
     checkbox.checked = !!item.done;
-    if (item.done) li.classList.add('done');
+    if (item.done) li.classList.add("done");
 
     frag.appendChild(li);
   });
@@ -56,7 +65,7 @@ function renderAll(arr) {
 
 function updateCounters() {
   totalEl.textContent = String(items.length);
-  counterEl.textContent = String(items.filter(it => it.done).length);
+  counterEl.textContent = String(items.filter((it) => it.done).length);
 }
 
 // updates the page once at the very start — shows an empty list and zero counters — so what you see immediately matches the current data.
@@ -64,8 +73,8 @@ renderAll(items);
 updateCounters();
 
 // ===== Step 3 : add / toggle / delete + simple validation + empty state =====
-// Step 3 makes the app actually work: it checks our input, adds a task on submit, 
-// lets you check or delete tasks with one click handler, 
+// Step 3 makes the app actually work: it checks our input, adds a task on submit,
+// lets you check or delete tasks with one click handler,
 // then redraws the list and counters (showing “No tasks yet.” if empty).
 
 const refresh = () => {
@@ -76,9 +85,9 @@ const refresh = () => {
 
 const showEmptyMessage = () => {
   if (items.length === 0) {
-    const li = document.createElement('li');   // createElement + appendChild
-    li.textContent = 'No tasks yet.';
-    li.className = 'empty';
+    const li = document.createElement("li"); // createElement + appendChild
+    li.textContent = "No tasks yet.";
+    li.className = "empty";
     listEl.appendChild(li);
   }
 };
@@ -86,31 +95,35 @@ const showEmptyMessage = () => {
 // Live validation (DOM event-based) + modify attribute/text
 const onTaskInput = () => {
   if (inputEl.checkValidity()) {
-    errorEl.textContent = '';
-    addBtn.removeAttribute('disabled');
+    errorEl.textContent = "";
+    addBtn.removeAttribute("disabled");
   } else {
-    errorEl.textContent = 'Enter at least 2 characters.';
-    addBtn.setAttribute('disabled', '');
+    errorEl.textContent = "Enter at least 2 characters.";
+    addBtn.setAttribute("disabled", "");
   }
 };
 
 // Add a task (uses template rendering from Step 2)
 const onAddSubmit = (e) => {
   e.preventDefault();
-  if (!inputEl.checkValidity()) { onTaskInput(); return; }
+  if (!inputEl.checkValidity()) {
+    onTaskInput();
+    return;
+  }
   const text = inputEl.value.trim();
   items.push({ text, done: false });
-  inputEl.value = '';
+  inputEl.value = "";
   onTaskInput();
   refresh();
 };
 
-// Find index of an <li> by walking siblings (parent/child/sibling nav)
+// Find index of an <li> by checking for siblings (parent/child/sibling navigation)
 const liIndex = (li) => {
-  let i = 0, node = listEl.firstElementChild;
+  let i = 0,
+    node = listEl.firstElementChild;
   while (node) {
     if (node === li) return i;
-    node = node.nextElementSibling;            // sibling navigation
+    node = node.nextElementSibling; // sibling navigation
     i++;
   }
   return -1;
@@ -120,8 +133,8 @@ const liIndex = (li) => {
 const onListClick = (e) => {
   const t = e.target;
 
-  if (t.classList.contains('delete')) {
-    const li = t.parentNode;                   // parent-child navigation
+  if (t.classList.contains("delete")) {
+    const li = t.parentNode; // parent-child navigation
     const idx = liIndex(li);
     if (idx >= 0 && idx < items.length) {
       items.splice(idx, 1);
@@ -129,23 +142,90 @@ const onListClick = (e) => {
     }
   }
 
-  if (t.classList.contains('toggle')) {
-    const li = t.parentNode.parentNode;        // checkbox -> label -> li
+  if (t.classList.contains("toggle")) {
+    const li = t.parentNode.parentNode; // checkbox -> label -> li
     const idx = liIndex(li);
     if (idx >= 0 && idx < items.length) {
-      items[idx].done = t.checked;             // class applied on re-render
+      items[idx].done = t.checked; // class applied on re-render
       refresh();
     }
   }
 };
 
 // Listeners (different event types)
-inputEl.addEventListener('input', onTaskInput);
-formEl.addEventListener('submit', onAddSubmit);
-listEl.addEventListener('click', onListClick);
+inputEl.addEventListener("input", onTaskInput);
+formEl.addEventListener("submit", onAddSubmit);
+listEl.addEventListener("click", onListClick);
 
 // Start
-onTaskInput();   // set initial disabled/error state
-refresh();       // first draw
+onTaskInput(); // set initial disabled/error state
+refresh(); // first draw
 
+// ===== Step 4 : filters + toast + storage (BOM) =====
+let currentFilter = "all";
+const STORAGE_KEY = "todo.items";
 
+// -- storage
+const save = () => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch {}
+};
+const load = () => {
+  try {
+    items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    items = [];
+  }
+};
+
+// -- tiny toast (uses BOM: setTimeout)
+const showToast = (msg) => {
+  toastEl.textContent = msg;
+  toastEl.hidden = false;
+  setTimeout(() => {
+    toastEl.hidden = true;
+  }, 1000);
+};
+
+// -- filters (iterate over DOM elements + modify style)
+const applyFilter = (filter) => {
+  currentFilter = filter;
+  const kids = listEl.children;
+  for (let i = 0; i < kids.length; i++) {
+    const li = kids[i];
+    const done = li.classList.contains("done");
+    const show =
+      filter === "all" ||
+      (filter === "active" && !done) ||
+      (filter === "done" && done);
+    li.style.display = show ? "" : "none";
+  }
+};
+
+filterBar.addEventListener("click", (e) => {
+  const btn = e.target;
+  if (btn.tagName !== "BUTTON") return;
+  const filter = btn.getAttribute("data-filter");
+  for (let i = 0; i < allFilterBtns.length; i++) {
+    allFilterBtns[i].setAttribute(
+      "aria-pressed",
+      allFilterBtns[i] === btn ? "true" : "false"
+    ); // modify attribute
+  }
+  applyFilter(filter);
+});
+
+// save + toast pop-up on actions from Step 3
+formEl.addEventListener("submit", () => {
+  save();
+  showToast("Added");
+});
+listEl.addEventListener("click", () => {
+  save();
+  showToast("Saved");
+});
+
+// load then draw
+load();
+refresh();
